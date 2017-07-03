@@ -45,7 +45,7 @@ public class EnemyManager : MonoBehaviour {
         if (collision.gameObject.tag == "Platform")
         {
             Debug.Log("Enemy exited off of platform.");
-            enemy_health.value -= 15;
+            //enemy_health.value -= 15;
 
             Die();
         }
@@ -56,6 +56,7 @@ public class EnemyManager : MonoBehaviour {
 
     public void Die()
     {
+        PlayerManager.instance.achievements++;
         Destroy(gameObject);
 
     }

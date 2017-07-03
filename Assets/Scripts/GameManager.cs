@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour {
 
 
 
-
+    public Text text_numlives;
+    public Text text_achievements;
+    public Text text_items;
 
     public string scenename = "game_over";
 
@@ -28,8 +30,8 @@ public class GameManager : MonoBehaviour {
     {
         PlayerManager.gameOverEvent += GameOver;
         PlayerManager.achievementEvent += UpdateAchievement;
-        //PlayerManager.deathEvent += DestroyPlayer;
         PlayerManager.deathEvent += SpawnPlayer;
+        PlayerManager.gamewinEvent += GameWin;
 
 
     }
@@ -42,17 +44,24 @@ public class GameManager : MonoBehaviour {
     {
         PlayerManager.gameOverEvent -= GameOver;
         PlayerManager.achievementEvent -= UpdateAchievement;
-        //PlayerManager.deathEvent -= DestroyPlayer;
         PlayerManager.deathEvent -= SpawnPlayer;
+        PlayerManager.gamewinEvent -= GameWin;
+
 
     }
     // Use this for initialization
     void Start() {
 
+
+
     }
 
     // Update is called once per frame
     void Update() {
+
+        text_numlives.text = "Number of Lives : " + PlayerManager.instance.number_of_lives;
+        text_achievements.text = "Achievements : " + PlayerManager.instance.achievements;
+        text_items.text = "Items : " + PlayerManager.instance.number_of_items;
 
     }
 
@@ -82,8 +91,17 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver()
     {
-        DestroyPlayer();
+        //DestroyPlayer();
         scenename = "game_over";
+        StartCoroutine(WaitAndDie(0.1f));
+        SceneManager.LoadScene(scenename);
+
+    }
+
+    public void GameWin()
+    {
+        //DestroyPlayer();
+        scenename = "you_win";
         StartCoroutine(WaitAndDie(0.1f));
         SceneManager.LoadScene(scenename);
 

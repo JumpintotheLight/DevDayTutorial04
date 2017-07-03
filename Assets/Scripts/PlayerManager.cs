@@ -29,12 +29,19 @@ public class PlayerManager : MonoBehaviour {
     public delegate void AchievementDelegate();
     public static event AchievementDelegate achievementEvent;
 
+    public delegate void GameWinDelegate();
+    public static event GameWinDelegate gamewinEvent;
+
     //public GameObject playerPrefab;
-    public int player_health;
-    public Slider player_health_slider;
+    public int player_health = 100;
     public int number_of_lives = 3;
+    public int achievements = 0;
+    public int number_of_items = 0;
 
+    // Health bar
+    public Slider player_health_slider;
 
+    // Player manager is a singleton
     public static PlayerManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
 
     void Awake()
@@ -76,7 +83,8 @@ public class PlayerManager : MonoBehaviour {
                 gameOverEvent();
         }
 
-        deathEvent();
+        if(deathEvent != null)
+            deathEvent();
 
 
         //StartCoroutine(WaitAndDie(0.5f));
@@ -98,6 +106,8 @@ public class PlayerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
         var x = Input.GetAxis("Horizontal") * Time.deltaTime * 10.0f;
         var z = Input.GetAxis("Vertical") * Time.deltaTime * 10.0f;
 
@@ -105,6 +115,14 @@ public class PlayerManager : MonoBehaviour {
         transform.Translate(x, 0, z);
 
         player_health_slider.value = player_health;
+
+        if(achievements >= 3)
+        {
+            if(gamewinEvent != null)
+            {
+                gamewinEvent();
+            }
+        }
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -145,8 +163,6 @@ public class PlayerManager : MonoBehaviour {
         if (collision.gameObject.tag == "Platform")
         {
             Debug.Log("Player exited off of platform.");
-            if (deathEvent != null)
-                deathEvent();
 
             Die();
         }
