@@ -37,6 +37,23 @@ public class EnemyManager : MonoBehaviour {
         }
     }
 
+    public void OnCollisionExit(Collision collision)
+    {
+
+        //Debug.Log("Collision with object detected.  " + collision.gameObject.name);
+
+        if (collision.gameObject.tag == "Platform")
+        {
+            Debug.Log("Enemy exited off of platform.");
+            enemy_health.value -= 15;
+
+            Die();
+        }
+
+       
+        
+    }
+
     public void Die()
     {
         Destroy(gameObject);
